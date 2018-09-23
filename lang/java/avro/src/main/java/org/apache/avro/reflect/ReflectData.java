@@ -769,6 +769,7 @@ public class ReflectData extends SpecificData {
                    iface.getPackage()==null?"":iface.getPackage().getName());
     Map<String,Schema> names = new LinkedHashMap<>();
     Map<String,Message> messages = protocol.getMessages();
+    System.out.println("messages + " + messages);
     for (Method method : iface.getMethods())
       if ((method.getModifiers() & Modifier.STATIC) == 0) {
         String name = method.getName();

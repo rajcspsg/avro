@@ -20,7 +20,6 @@ package org.apache.avro.reflect;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -34,7 +33,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-
 import org.apache.avro.AvroRuntimeException;
 import org.apache.avro.AvroTypeException;
 import org.apache.avro.Protocol;
@@ -324,14 +322,15 @@ public class TestReflect {
     r9_1.value = r8;
     checkReadWrite(r9_1, ReflectData.get().getSchema(R9_1.class));
   }
-  
+
   // test union annotation on methods and parameters
   public static interface P0 {
     @Union({Void.class,String.class})
       String foo(@Union({Void.class,String.class}) String s);
   }
 
-  @Test public void testP0() throws Exception {
+  @Test public void testP0() {
+    System.out.println("starting testP0");
     Protocol p0 = ReflectData.get().getProtocol(P0.class);
     Protocol.Message message = p0.getMessages().get("foo");
     // check response schema is union
@@ -341,6 +340,7 @@ public class TestReflect {
     assertEquals(Schema.Type.STRING, response.getTypes().get(1).getType());
     // check request schema is union
     Schema request = message.getRequest();
+    System.out.println("request is " + request);
     Field field = request.getField("s");
     assertNotNull("field 's' should not be null", field);
     Schema param = field.schema();
@@ -350,6 +350,7 @@ public class TestReflect {
     // check union erasure
     assertEquals(String.class, ReflectData.get().getClass(response));
     assertEquals(String.class, ReflectData.get().getClass(param));
+    System.out.println("ending testP0");
   }
 
   // test Stringable annotation
